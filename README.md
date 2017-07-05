@@ -13,6 +13,12 @@ The availability and the MTBF are constantly updated
 
 ![Alt text](https://ibin.co/w800/3SJbT1fccUOW.jpg "Table of tests")
 
+
+### Sequence Diagram
+
+![Alt text](https://ibin.co/w800/3SK3wcRHnCct.jpg "Sequence diagram")
+
+
 ### Useful Links
 
 [TCP Connection Establishment](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Connection_establishment)
