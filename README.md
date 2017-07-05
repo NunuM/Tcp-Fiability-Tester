@@ -12,3 +12,7 @@ The application lets you create TCP tests. In test creation tab, you specify the
 The aviability and the MTBF is constantly updated. 
 
 ![Alt text](https://ibin.co/w800/3SJbT1fccUOW.jpg "Table of tests")
+
+### Useful Links
+
+[I'm an inline-style link](https://www.google.com)
