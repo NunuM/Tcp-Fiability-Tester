@@ -9,7 +9,7 @@ The application lets you create TCP tests. In test creation tab, you specify the
 
 ### Result Table
 
-The aviability and the MTBF is constantly updated. 
+The availability and the MTBF are constantly updated
 
 ![Alt text](https://ibin.co/w800/3SJbT1fccUOW.jpg "Table of tests")
 
