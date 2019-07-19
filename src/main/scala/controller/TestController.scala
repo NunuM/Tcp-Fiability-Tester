@@ -21,7 +21,7 @@ import scalafx.collections.ObservableBuffer
   */
 class TestController {
 
-  val system = ActorSystem(AppConfig.appName)
+  val system = ActorSystem("tester-system")
 
   import system.dispatcher
 

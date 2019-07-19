@@ -317,6 +317,7 @@ object MainApplicationGUI extends JFXApp {
         }
         center = new ScrollPane {
           content = table
+          fitToHeight = true
         }
         bottom = new HBox {
           alignment = Pos.Center
@@ -324,19 +325,12 @@ object MainApplicationGUI extends JFXApp {
           children = Seq(new Button("Export Table") {
             onAction = handle {
               val dc = new DirectoryChooser {
-                title = "Select folder destination"
+                title = "Select destination folder"
               }
 
               val file = dc.showDialog(stage)
 
-              if (file == null) {
-                new Alert(AlertType.Error) {
-                  initOwner(stage)
-                  title = "Export table"
-                  headerText = "Invalid directory."
-                  contentText = "Ooops, you don't pick any directory.\n"
-                }.showAndWait()
-              } else {
+              if (file != null) {
                 if (file.isDirectory && file.canWrite) {
                   theController.writeTo(file.getAbsolutePath, writeResult)
                 } else {
