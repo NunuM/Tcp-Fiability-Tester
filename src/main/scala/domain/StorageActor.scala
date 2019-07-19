@@ -7,7 +7,7 @@ import java.util.UUID
 import akka.actor.{Actor, ActorLogging}
 import domain.TestEvents._
 
-import scala.concurrent.Future
+
 import scalafx.collections.ObservableBuffer
 
 /**

@@ -1,4 +1,4 @@
-name := "tcp_anadi"
+name := "tcp_tester"
 
 version := "1.0"
 
@@ -10,10 +10,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.0",
   "com.typesafe" % "config" % "1.3.1",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.5.0",
-  "org.scalafx" % "scalafx_2.12" % "8.0.102-R11",
-  "org.scalatest" % "scalatest_2.12" % "3.0.1"
+  "org.scalatest" % "scalatest_2.12" % "3.0.1",
+  "org.scalafx" % "scalafx_2.12" % "8.0.102-R11"
 )
 
-assemblyJarName in assembly := "tcp_anadi.jar"
+assemblyJarName in assembly := "tcp_tester.jar"
 
 scalacOptions in (Compile,doc) := Seq("-groups", "-implicits")

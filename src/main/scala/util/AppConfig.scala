@@ -28,6 +28,6 @@ object AppConfig {
   val testConnectionTimeout: time.Duration = Try(conf.getDuration("timeout"))
     .getOrElse(java.time.Duration.ofSeconds(3600l))
 
-  val appName: String = Try(conf.getString("app.name")).getOrElse("ANADI")
+  val appName: String = Try(conf.getString("app.name")).getOrElse("TCP")
 
 }

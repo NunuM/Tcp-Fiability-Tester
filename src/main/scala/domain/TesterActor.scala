@@ -24,7 +24,7 @@ class TesterActor(storageActor: ActorRef) extends Actor with ActorLogging {
 
         val start = nowTime()
 
-        val testResults = TestResults(start,null,toTest,List())
+        val testResults = TestResults(start, null, toTest, List())
 
         storageActor ! NewTest(testResults)
 
@@ -38,13 +38,13 @@ class TesterActor(storageActor: ActorRef) extends Actor with ActorLogging {
           Duration.Zero,
           FiniteDuration(toTest.interval._1, toTest.interval._2),
           helpers,
-          ConnectionHelper(toTest.iD,toTest.inetSocketAddress, toTest.timeout)
+          ConnectionHelper(toTest.iD, toTest.inetSocketAddress, toTest.timeout)
         )
 
         Thread sleep toTest.duration.toMillis
 
 
-        storageActor ! FinishTest(toTest.iD,nowTime())
+        storageActor ! FinishTest(toTest.iD, nowTime())
 
         cancellable cancel()
 

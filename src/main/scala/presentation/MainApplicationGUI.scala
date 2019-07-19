@@ -160,7 +160,7 @@ object MainApplicationGUI extends JFXApp {
     onAction = handle {
 
       textFields.count(_.text.value.isEmpty) match {
-        case 0 => {
+        case 0 =>
           Try {
             theController.getHostAddress(nodeText.text.value)
           } match {
@@ -172,8 +172,8 @@ object MainApplicationGUI extends JFXApp {
                 Duration(timeoutText.text.value)
               )
               textFields.foreach(_.text = "")
-              textFields.filter(_.styleClass.contains("error")).foreach(_.styleClass -= "error")
-              textFields.filter(_.styleClass.contains("ok")).foreach(_.styleClass -= "ok")
+              textFields.filter(_.styleClass.contains("error")).foreach(_.styleClass.replaceAll("error", ""))
+              textFields.filter(_.styleClass.contains("ok")).foreach(_.styleClass.replaceAll("ok", ""))
               labelFieldErrors.foreach(_.text = "")
             }
             case Failure(ex) => {
@@ -184,7 +184,6 @@ object MainApplicationGUI extends JFXApp {
                 nodeText.styleClass += "error"
             }
           }
-        }
         case _ => textFields.filter(_.text.value.isEmpty).filter(_.styleClass.contains("error")).foreach(_.styleClass += "error")
       }
 
@@ -510,6 +509,7 @@ object MainApplicationGUI extends JFXApp {
         mtbfColumn
       )
     }
+
     table
   }
 
