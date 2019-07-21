@@ -8,13 +8,12 @@ import akka.pattern.ask
 import akka.util.Timeout
 import domain.TestEvents.{SinkResults, TableResultsModel, TestProprieties}
 import domain.TestSupervisorActor
-import util.AppConfig
-
-import scala.concurrent.duration.{Duration, _}
-import scala.util.{Failure, Success}
 import scalafx.application.Platform
 import scalafx.beans.property.StringProperty
 import scalafx.collections.ObservableBuffer
+
+import scala.concurrent.duration.{Duration, _}
+import scala.util.{Failure, Success}
 
 /**
   * Created by nuno on 28-04-2017.
@@ -48,10 +47,16 @@ class TestController {
                 port: Int,
                 duration: Duration,
                 interval: Duration,
-                timeout: Duration): Unit = {
+                timeout: Duration,
+                concurrent: Int): Unit = {
 
 
-    supervisor ! TestProprieties(UUID.randomUUID(), new InetSocketAddress(inetAddress, port), duration, interval, Timeout(timeout._1, timeout._2))
+    supervisor ! TestProprieties(UUID.randomUUID(),
+      new InetSocketAddress(inetAddress, port),
+      duration,
+      interval,
+      Timeout(timeout._1, timeout._2),
+      concurrent)
 
   }
 

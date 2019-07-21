@@ -2,7 +2,6 @@ package domain
 
 import akka.actor.{Actor, ActorLogging, Props}
 import domain.TestEvents.{SinkResults, TableResultsModel, TestProprieties}
-
 import scalafx.collections.ObservableBuffer
 /**
   * Created by nuno on 27-04-2017.

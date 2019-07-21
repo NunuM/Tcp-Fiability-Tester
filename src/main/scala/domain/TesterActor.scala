@@ -7,6 +7,8 @@ import domain.TestEvents._
 
 import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.util.Random
+
 
 /**
   * Created by nuno on 27-04-2017.
@@ -20,38 +22,44 @@ class TesterActor(storageActor: ActorRef) extends Actor with ActorLogging {
   override def receive: Receive = {
     case toTest: TestProprieties => {
 
-      Future {
+      for (_ <- 1 to toTest.numberOfConcurrentWorkers) {
 
-        val start = nowTime()
+        Future {
 
-        val testResults = TestResults(start, null, toTest, List())
+          log.info("Starting...")
 
-        storageActor ! NewTest(testResults)
+          Thread sleep Random.nextInt(50)
 
-        val counter: ActorRef = context.actorOf(Props(new CounterActor(storageActor)))
+          val start = nowTime()
 
-        val helpers: ActorRef = context.actorOf(Props(new TesterConnectionActor(counter)))
+          val testResults = TestResults(start, null, toTest, List())
 
-        log.info(s"Starting test on ${toTest.inetSocketAddress.getAddress} with port ${toTest.inetSocketAddress.getPort}.")
+          storageActor ! NewTest(testResults)
 
-        val cancellable = context.system.scheduler.schedule(
-          Duration.Zero,
-          FiniteDuration(toTest.interval._1, toTest.interval._2),
-          helpers,
-          ConnectionHelper(toTest.iD, toTest.inetSocketAddress, toTest.timeout)
-        )
+          val counter: ActorRef = context.actorOf(Props(new CounterActor(storageActor)))
 
-        Thread sleep toTest.duration.toMillis
+          val helpers: ActorRef = context.actorOf(Props(new TesterConnectionActor(counter)))
 
+          log.info(s"Starting test on ${toTest.inetSocketAddress.getAddress} with port ${toTest.inetSocketAddress.getPort}.")
 
-        storageActor ! FinishTest(toTest.iD, nowTime())
+          val cancellable = context.system.scheduler.schedule(
+            Duration.Zero,
+            FiniteDuration(toTest.interval._1, toTest.interval._2),
+            helpers,
+            ConnectionHelper(toTest.iD, toTest.inetSocketAddress, toTest.timeout)
+          )
 
-        cancellable cancel()
+          Thread sleep toTest.duration.toMillis
 
-        log.info(s"Finished test on ${toTest.inetSocketAddress.getAddress} with port ${toTest.inetSocketAddress.getPort}.")
+          storageActor ! FinishTest(toTest.iD, nowTime())
+
+          cancellable cancel()
+
+          log.info(s"Finished test on ${toTest.inetSocketAddress.getAddress} with port ${toTest.inetSocketAddress.getPort}.")
+
+        }
 
       }
-
 
     }
     case _ => log.info("Unknown message")

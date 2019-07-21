@@ -55,7 +55,12 @@ object MainApplication extends App {
 
           val supervisor: ActorRef = system.actorOf(Props[TestSupervisorActor], s"tester-$node-supervisor")
 
-          supervisor ! TestProprieties(UUID.randomUUID(), new InetSocketAddress(inetAddress, port), duration, interval, Timeout(timeout._1, timeout._2))
+          supervisor ! TestProprieties(UUID.randomUUID(),
+            new InetSocketAddress(inetAddress, port),
+            duration,
+            interval,
+            Timeout(timeout._1, timeout._2),
+            1)
 
 
         }.recover {

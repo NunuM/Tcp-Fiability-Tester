@@ -5,9 +5,9 @@ import java.sql.Timestamp
 import java.util.UUID
 
 import akka.util.Timeout
+import scalafx.beans.property.{ObjectProperty, StringProperty}
 
 import scala.concurrent.duration.Duration
-import scalafx.beans.property.{ObjectProperty, StringProperty}
 
 /**
   * Created by nuno on 27-04-2017.
@@ -27,7 +27,8 @@ object TestEvents {
                               inetSocketAddress: InetSocketAddress,
                               duration: Duration,
                               interval: Duration,
-                              timeout: Timeout
+                              timeout: Timeout,
+                              numberOfConcurrentWorkers: Int
                             ) {
   }
 
@@ -73,7 +74,8 @@ object TestEvents {
 
         val uptime = totalSucceeded.toInt * testProprieties.interval
 
-        (uptime / totalTime) * 100
+        val value =(uptime / totalTime) * 100
+        Math.floor(value * 100) / 100
       } else {
         0
       }
@@ -84,7 +86,7 @@ object TestEvents {
       *
       * @return double
       */
-    def getMTBF: Double = {
+    def getMTBF: Long = {
       val totalSucceeded = testRecords.map(_.succeeded).sum.toDouble
       val totalFails = testRecords.map(_.failed).sum.toDouble
 
@@ -140,7 +142,7 @@ object TestEvents {
                            _failed: Int,
                            _total: Int,
                            _availability: Double,
-                           _mtbf: Double
+                           _mtbf: Long
                          ) {
 
 
@@ -156,7 +158,7 @@ object TestEvents {
     var failed = new ObjectProperty(this, "Failed", _failed)
     var total = new ObjectProperty(this, "Total", _total)
     var available = new ObjectProperty(this, "Availability", _availability)
-    var mtbf = new ObjectProperty(this, "Availability", _mtbf)
+    var mtbf = new ObjectProperty(this, "MTBF", _mtbf)
 
     override def equals(o: scala.Any): Boolean = {
       if (o == null)
@@ -196,7 +198,7 @@ object TestEvents {
               succeeded: Int,
               failed: Int,
               availability: Double,
-              mtbf: Double): TableResultsModel = {
+              mtbf: Long): TableResultsModel = {
       new TableResultsModel(
         uUID,
         start,

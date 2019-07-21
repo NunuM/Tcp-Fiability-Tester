@@ -5,13 +5,7 @@ The application lets you create TCP tests. In test creation tab, you specify the
 
 ### Create Test
 
-![Alt text](https://ibin.co/3SJabwtNElgm.jpg "Create test")
-
-### Result Table
-
-The availability and the MTBF are constantly updated
-
-![Alt text](https://ibin.co/w800/3SJbT1fccUOW.jpg "Table of tests")
+![Alt text](https://media.giphy.com/media/McD7aBXafuIkhuaHEc/giphy.gif "Table of tests")
 
 
 ### Sequence Diagram

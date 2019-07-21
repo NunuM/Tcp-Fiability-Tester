@@ -2,12 +2,9 @@ package presentation
 
 import controller.TestController
 import domain.TestEvents.TableResultsModel
-import util.AppConfig
-
-import scala.concurrent.duration._
-import scala.util.{Failure, Success, Try}
 import scalafx.Includes._
 import scalafx.application.{JFXApp, Platform}
+import scalafx.beans.property.DoubleProperty
 import scalafx.geometry.{Insets, Pos, Side}
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.control._
@@ -16,6 +13,10 @@ import scalafx.scene.layout._
 import scalafx.scene.text.Font
 import scalafx.scene.{Node, Scene}
 import scalafx.stage.{DirectoryChooser, WindowEvent}
+import util.AppConfig
+
+import scala.concurrent.duration._
+import scala.util.{Failure, Success, Try}
 
 /**
   * Created by nuno on 28-04-2017.
@@ -26,6 +27,16 @@ object MainApplicationGUI extends JFXApp {
 
 
   val table = createResultsTableNode()
+
+  val concurrentLabel = new Label("1");
+  val concurrentTask = new Slider(1, 20, 1)
+
+  val concurrentNumberObserver = new DoubleProperty(this, "Concurrent", 0)
+  concurrentNumberObserver <== concurrentTask.value
+
+  concurrentNumberObserver.delegate.onChange((_, _, newValue) => {
+    concurrentLabel.text = newValue.intValue().toString
+  })
 
 
   val nodeErrorLabel: Label = new Label()
@@ -169,12 +180,14 @@ object MainApplicationGUI extends JFXApp {
                 portText.text.value.toInt,
                 Duration(durationText.text.value),
                 Duration(intervalText.text.value),
-                Duration(timeoutText.text.value)
+                Duration(timeoutText.text.value),
+                concurrentTask.value.toInt
               )
               textFields.foreach(_.text = "")
               textFields.filter(_.styleClass.contains("error")).foreach(_.styleClass.replaceAll("error", ""))
               textFields.filter(_.styleClass.contains("ok")).foreach(_.styleClass.replaceAll("ok", ""))
               labelFieldErrors.foreach(_.text = "")
+              concurrentTask.value = 0.0
             }
             case Failure(ex) => {
               nodeErrorLabel.text = ex.getMessage
@@ -202,7 +215,9 @@ object MainApplicationGUI extends JFXApp {
 
   stage = new JFXApp.PrimaryStage {
     title = AppConfig.appName
-    scene = new Scene(700, 400) {
+    minHeight = 450
+    minWidth = 700
+    scene = new Scene(700, 450) {
       stylesheets = List("gui.css")
       root = new BorderPane {
         center = createTabPane
@@ -291,6 +306,12 @@ object MainApplicationGUI extends JFXApp {
           }, 0, 4)
           add(timeoutText, 1, 4)
           add(timeoutErrorLabel, 2, 4)
+
+          add(new Label("Concurrent:") {
+            font = Font.font("ubuntu", 16)
+          }, 0, 5)
+          add(concurrentTask, 1, 5)
+          add(concurrentLabel, 2, 5)
         }
 
         bottom = new HBox {
@@ -479,7 +500,7 @@ object MainApplicationGUI extends JFXApp {
       prefWidth = 140
     }
 
-    val mtbfColumn = new TableColumn[TableResultsModel, Double] {
+    val mtbfColumn = new TableColumn[TableResultsModel, Long] {
       text = "MTBF"
       cellValueFactory = {
         _.value.mtbf

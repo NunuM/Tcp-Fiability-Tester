@@ -6,8 +6,6 @@ import java.util.UUID
 
 import akka.actor.{Actor, ActorLogging}
 import domain.TestEvents._
-
-
 import scalafx.collections.ObservableBuffer
 
 /**
@@ -21,9 +19,10 @@ class StorageActor(tests: ObservableBuffer[TableResultsModel]) extends Actor wit
 
   override def receive: Receive = {
     case newTest: NewTest => {
-      test += (newTest.testResults.testProprieties.iD -> newTest.testResults)
-
-      tests += TableResultsModel(newTest.testResults)
+      if (!test.contains(newTest.testResults.testProprieties.iD)) {
+        test += (newTest.testResults.testProprieties.iD -> newTest.testResults)
+        tests += TableResultsModel(newTest.testResults)
+      }
     }
     case toUpdate: NewTestRecord => {
       test.get(toUpdate.uUID) match {
@@ -56,12 +55,12 @@ class StorageActor(tests: ObservableBuffer[TableResultsModel]) extends Actor wit
 
       test.foreach {
         case (k, v) => {
-          val writerr = new PrintWriter(new File(s"result${k.toString}.csv"))
-          writerr.write("id,start,status\n")
+          val secondWriter = new PrintWriter(new File(s"result-${k.toString}.csv"))
+          secondWriter.write("id,start,status\n")
           v.testRecords.foreach { ele =>
-            writerr.write(s"${k.toString},${ele.registeredAt.getTime},${if (ele.succeeded == 1l) "UP" else "DOWN"}\n")
+            secondWriter.write(s"${k.toString},${ele.registeredAt.getTime},${if (ele.succeeded == 1l) "UP" else "DOWN"}\n")
           }
-          writerr.close()
+          secondWriter.close()
         }
       }
 

@@ -13,7 +13,7 @@ import org.scalactic._
   */
 class ResulTest extends FlatSpec {
 
-  val proprieties = TestProprieties(UUID.randomUUID(),new InetSocketAddress("google.pt",443),5 minutes,30 seconds,20 seconds)
+  val proprieties = TestProprieties(UUID.randomUUID(),new InetSocketAddress("google.pt",443),5 minutes,30 seconds,20 seconds, 1)
   val now = new Timestamp(System.currentTimeMillis())
 
   "A result from test " should " be calculated" in {
